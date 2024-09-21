@@ -5,6 +5,9 @@ import Home from './telas/Home';
 import Cadastro from './telas/cadastro';
 import Jogar from './telas/jogar';
 import Temas from './telas/cadastro/temas';
+import Jogo from './telas/jogar/Jogo';
+import Score from './telas/jogar/score';
+
 
 /* Help:
 https://reactnavigation.org/docs/hello-react-navigation
@@ -28,6 +31,8 @@ export default function App() {
         <Stack.Screen name="cadastro" component={Cadastro} options={{ headerShown:false, animation:'slide_from_right' }} />
         <Stack.Screen name="jogar" component={Jogar} options={{ headerShown:false, animation:'slide_from_right'}} />
         <Stack.Screen name="temas" component={Temas} options={{ headerShown:false, animation:'slide_from_right'}} /> 
+        <Stack.Screen name="Jogo" component={Jogo} options={{ headerShown:false, animation:'slide_from_right'}} /> 
+        <Stack.Screen name="Score" component={Score} options={{ headerShown:false, animation:'slide_from_right'}} /> 
         
 
       </Stack.Navigator>

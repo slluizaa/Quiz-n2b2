@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image ,TouchableOpacity,TextInput} from 'react-native';
+import { StyleSheet, Text, View, Image ,TouchableOpacity,TextInput, FlatList} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
 
@@ -18,6 +18,24 @@ export default function Score ({navigation,route}) {
         <Text style={styles.texto}>Você acertou:</Text>
         <Text style={styles.textoResultado}>{route.params?.parametroPontos} de {route.params?.totalQuestions}</Text>
         </View>
+        <Text style= {styles.titulo}> Gabarito</Text>
+        <FlatList
+        data={route.params?.resumoRespostas}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.questionContainer}>
+            <Text style={styles.questionText}>{item.question}</Text>
+            <Text style={item.isCorrect ? styles.correctAnswer : styles.wrongAnswer}>
+              Sua Resposta: {item.userAnswer} {item.isCorrect ? '(Correto)' : '(Errado)'}
+            </Text>
+            {!item.isCorrect && (
+              <Text style={styles.correctAnswer}>
+                Resposta Correta: {item.correctAnswer}
+              </Text>
+            )}
+          </View>
+        )}
+        />
         <View style={styles.areaBotao}>
         <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
         <Text style={styles.textoBotao}>Voltar</Text>
@@ -45,7 +63,8 @@ const styles = StyleSheet.create({
     width:'50%',
     height:'10%',
     marginVertical:20,
-    alignSelf:'center'
+    alignSelf:'center',
+    marginTop:50,
   },
   titulo: {
     fontSize: 30,
@@ -98,8 +117,31 @@ const styles = StyleSheet.create({
     backgroundColor:'#d1c4e9',
     width:'85%',
     alignSelf:'center',
-    height:'35%',
+    height:'25%',
     borderRadius:7,
     paddingTop:20
+  },
+  questionContainer: {
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: '#d1c4e9',
+    borderRadius: 10,
+    width:'85%',
+    alignSelf:'center'
+  },
+  questionText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color:'#820B8A'
+  },
+  correctAnswer: {
+    fontSize: 16,
+    color: 'green',
+    marginTop: 5,
+  },
+  wrongAnswer: {
+    fontSize: 16,
+    color: 'red',
+    marginTop: 5,
   },
 });

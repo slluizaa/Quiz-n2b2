@@ -30,20 +30,34 @@ export default function Jogo ({navigation, route}) {
       const [respostaSelecionada, setRespostaSelecionada] = useState(null);
       const [score, setScore] = useState(0);
       const [respondida, setRespondida] = useState(false);
+      const [resumoRespostas, setResumoRespostas] = useState([]);
     
       const handleAnswerSelect = (answer) => {
         setRespostaSelecionada(answer);
         setRespondida(true);
     
-        if (answer === quizData[perguntaAtual].correctAnswer) {
-          setScore(score + 1);
-        }
+
+        const isCorrect = answer === quizData[perguntaAtual].correctAnswer;
+        const novoResumo = [
+          ...resumoRespostas,
+          {
+            question: quizData[perguntaAtual].question,
+            userAnswer: answer,
+            correctAnswer: quizData[perguntaAtual].correctAnswer,
+            isCorrect: isCorrect
+          }
+        ];
+        setResumoRespostas(novoResumo);
     
-        setTimeout(() => {
-          if (perguntaAtual < quizData.length - 1) {
-            setPerguntaAtual(perguntaAtual + 1);
+        const newScore = isCorrect ? score + 1 : score;
+
+          setTimeout(() => {
+            if (perguntaAtual < quizData.length - 1) {
+              // Avança para a próxima pergunta
+              setPerguntaAtual(perguntaAtual + 1);
+              setScore(newScore); // Atualiza o estado da pontuação
           } else {
-            navigation.navigate('Score', { parametroPontos:score, totalQuestions: quizData.length });
+            navigation.navigate('Score', { parametroPontos:newScore, totalQuestions: quizData.length ,resumoRespostas: novoResumo});
           }
           setRespondida(false);
           setRespostaSelecionada(null);

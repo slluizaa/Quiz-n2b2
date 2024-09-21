@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   textoBotao:{
     color:'#820B8A',
     fontSize:20,
+    fontWeight: 'bold'
   },
   botaoCadastroPergunta:{
     backgroundColor: '#F4E04D',

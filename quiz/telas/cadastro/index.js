@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image ,TouchableOpacity, TextInput} from 'react-native';
+import { StyleSheet, Text, View, Image ,TouchableOpacity, TextInput, ScrollView} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
 import logo from '../../assets/logo.png';
@@ -10,7 +10,11 @@ export default function Cadastro({navigation}) {
 
   const [tema, setTema] = useState("");
   const [pergunta, setPergunta] = useState("")
-  const [alternativa, setAlternativa] = useState("")
+  const [alternativa1, setAlternativa1] = useState("")
+  const [alternativa2, setAlternativa2] = useState("")
+  const [alternativa3, setAlternativa3] = useState("")
+  const [alternativa4, setAlternativa4] = useState("")
+
 
   //variaveis dropdown
   const [open, setOpen] = useState(false);
@@ -29,10 +33,10 @@ export default function Cadastro({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Image source={logo} style={styles.logo}/>
-      <Text style={styles.titulo}>Cadastro de Perguntas</Text>
 
           <View style={styles.containerForm}>
+          <Text style={styles.titulo}>Cadastro de Perguntas</Text>
+          <Text style={styles.label}>Selecione o tema</Text>
           <DropDownPicker
           open={open}
           value={value}
@@ -45,27 +49,37 @@ export default function Cadastro({navigation}) {
             color:'#820B8A'
           }}
           />
+        <Text style={styles.label}>Pergunta:</Text>
         <TextInput
-          keyboardType="decimal-pad"
-          placeholder="Código"
+         onChangeText={(texto) => setPergunta(texto)}
+          value={pergunta}
           style={styles.campo}
         />
+        <Text style={styles.label}>1º alternativa:</Text>
         <TextInput
-          onChangeText={(text) => setNome(text)}
-          placeholder="Nome"
+          onChangeText={(text) => setAlternativa1(text)}
+          value={alternativa1}
           style={styles.campo}
         />
+        <Text style={styles.label}>2º alternativa:</Text>
         <TextInput
-          onChangeText={(text) => setEmail(text)}
-          placeholder="Email"
+          onChangeText={(text) => setAlternativa2(text)}
+          value={alternativa2}
           style={styles.campo}
         />
+        <Text style={styles.label}>3º alternativa:</Text>
         <TextInput
-          onChangeText={(text) => setEmail(text)}
-          placeholder="Email"
+          onChangeText={(text) => setAlternativa3(text)}
+          value={alternativa3}
           style={styles.campo}
         />
-
+        <Text style={styles.label}>4º alternativa:</Text>
+        <TextInput
+          onChangeText={(text) => setAlternativa4(text)}
+          value={alternativa4}
+          style={styles.campo}
+        />
+        <Text style={styles.label}>Selecione a alternativa correta</Text>
         <DropDownPicker
           open={openAcerto}
           value={valueAcerto}
@@ -78,7 +92,7 @@ export default function Cadastro({navigation}) {
             color:'#820B8A'
           }}
           containerStyle={{
-            marginTop: 15,
+            marginTop: 5
           }}
         />
 
@@ -87,8 +101,8 @@ export default function Cadastro({navigation}) {
           <Text style={styles.textoBotao}>Salvar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.botao} >
-          <Text style={styles.textoBotao}>Apagar Tudo</Text>
+        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')} >
+          <Text style={styles.textoBotao}> Voltar </Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -113,14 +127,25 @@ const styles = StyleSheet.create({
     width:'50%',
     height:'10%',
     marginVertical:20,
+    alignContent:'center'
   },
   containerForm: {
+    flex:1,
     width: '100%',
   },
   titulo: {
     fontSize: 30,
-    marginBottom: 30,
     color:'#820B8A',
+    fontWeight: 'bold',
+    alignSelf:'center',
+    marginBottom:10,
+    marginTop:40
+  },
+  label:{
+    marginTop:7,
+    fontSize:18,
+    color:'#820B8A',
+    fontWeight: 'bold'
   },
   campo: {
     width: '100%',
@@ -131,7 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
     padding: 10,
-    marginTop: 10,
+    marginBottom:10
   },
   botao: {
     backgroundColor: '#F4E04D',
@@ -148,34 +173,18 @@ const styles = StyleSheet.create({
     justifyContent:'space-around',
     borderRadius: 10,
     marginTop: 10,
+    marginBottom:20
   },
   textoBotao: {
     color: '#820B8A',
     fontSize: 20,
+    fontWeight: 'bold'
   },
   listausuarios: {
     width: '100%',
     marginTop: 20,
   },
-  usuario: {
-    marginBottom: 10,
-    padding: 10,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 5,
-  },
-  listaNome: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  listaTelefone: {
-    fontSize: 16,
-  },
-  dadosBotoesAcao: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  dropdown:{
+    dropdown:{
     backgroundColor: "black"
   }
 });

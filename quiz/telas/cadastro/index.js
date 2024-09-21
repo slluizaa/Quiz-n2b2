@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
-import { obtemTodasPerguntas, adicionaPergunta, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
+import { obtemTodasPerguntas, adicionaPergunta,obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
 import uuid from 'react-native-uuid';
 
 export default function Cadastro({ navigation }) {

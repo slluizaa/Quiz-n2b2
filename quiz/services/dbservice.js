@@ -216,3 +216,16 @@ export async function excluiTema(id_tema) {
         await cx.closeAsync();
     }
 }
+
+export async function contaPerguntas(id_tema) {
+    const cx = await getDbConnection();
+    try {
+        const query = 'SELECT COUNT(*) FROM tbPerguntas WHERE id_tema = ? group by id_tema';
+        const resultado = await cx.runAsync(query, [id_tema]);
+        return resultado.changes === 1;
+    } catch (e) {
+        throw new Error('Erro ao contar a quantidade de perguntas: ' + e.message);
+    } finally {
+        await cx.closeAsync();
+    }
+}

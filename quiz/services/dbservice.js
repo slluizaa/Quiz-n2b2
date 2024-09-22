@@ -91,18 +91,21 @@ export async function obtemPerguntasPorTema(id_tema) {
         for (const pergunta of perguntas) {
             const alternativas = await cx.getAllAsync('SELECT * FROM tbAlternativas WHERE id_pergunta = ?', [pergunta.id_pergunta]);
             perguntasComAlternativas.push({
-                ...pergunta,
-                alternativas,
+                id_pergunta: pergunta.id_pergunta,
+                pergunta: pergunta.pergunta,
+                alternativas: alternativas.map(alt => alt.alternativa), // Garante que estamos extraindo o campo 'alternativa'
+                correta: alternativas.find(alt => alt.resposta === 'sim').alternativa // Busca a alternativa correta
             });
         }
 
         return perguntasComAlternativas;
     } catch (e) {
-        throw new Error('Erro ao obter perguntas: ' + e.message);
+        throw new Error('Erro ao obter perguntas e alternativas: ' + e.message);
     } finally {
         await cx.closeAsync();
     }
 }
+
 
 export async function obtemTodasPerguntas() {
     const cx = await getDbConnection();

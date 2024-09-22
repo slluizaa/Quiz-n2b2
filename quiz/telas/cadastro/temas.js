@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Alert, Keyboard, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Alert, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import logo from '../../assets/logo.png';
 import { adicionaTema, createTable, obtemTodosTemas, temaExiste, excluiTema, editaTema } from '../../services/dbservice';
@@ -9,8 +9,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { LogBox } from 'react-native';
 
 LogBox.ignoreLogs([
-  'NativeDatabase.closeAsync', 
-  'Error: Call to function NativeDatabase.closeAsync', 
+  'NativeDatabase.closeAsync',
+  'Error: Call to function NativeDatabase.closeAsync',
   'Erro ao obter temas:  Call to function'
 ]);
 
@@ -18,7 +18,7 @@ export default function Cadastro({ navigation }) {
   const [tema, setTema] = useState("");
   const [idTemaEditando, setIdTemaEditando] = useState(null);
   const [temas, setTemas] = useState([]);
-  const [showTema, setShowTema] = useState(false); // Controla se a lista de temas deve ser mostrada
+  const [showTema, setShowTema] = useState(false);
 
   useEffect(() => {
     async function setupDatabase() {
@@ -29,10 +29,9 @@ export default function Cadastro({ navigation }) {
       }
     }
     setupDatabase();
-    carregaDados(); // Carrega os temas ao iniciar o componente
+    carregaDados();
   }, []);
 
-  //Remove os acentos e converte todas as letras da palavra em minúsculo
   function normalizarTexto(texto) {
     return texto
       .normalize('NFD')
@@ -62,7 +61,7 @@ export default function Cadastro({ navigation }) {
           Alert.alert('Erro!', 'Não foi possível atualizar o tema.');
         }
         limparCampos();
-        await carregaDados(); // Recarrega a lista após a edição
+        await carregaDados();
       } catch (e) {
         console.log("Erro ao atualizar: ", e.message);
       }
@@ -104,22 +103,22 @@ export default function Cadastro({ navigation }) {
   }
 
   async function editarTema(tema) {
-    setTema(tema.tema); // Preenche o campo de entrada com o tema a ser editado
-    setIdTemaEditando(tema.id_tema); // Armazena o ID do tema sendo editado
+    setTema(tema.tema);
+    setIdTemaEditando(tema.id_tema);
   }
 
   function limparCampos() {
     setTema("");
-    setIdTemaEditando(null); // Limpa o id para não entrar no modo de edição
+    setIdTemaEditando(null);
   }
 
   async function carregaDados() {
     try {
       const temasCarregados = await obtemTodosTemas();
-      setTemas(temasCarregados); // Atualiza o estado com a lista de temas
-      setShowTema(true); // Exibe a lista quando o botão Carregar é clicado
+      setTemas(temasCarregados);
+      setShowTema(true);
     } catch (e) {
-      console.log("Silent Error on Data Load: ", e.message); // Log quietly without showing a notification
+      console.log("Erro ao carregar dados: ", e.message);
     }
   }
 
@@ -150,7 +149,6 @@ export default function Cadastro({ navigation }) {
             <Text style={styles.textoBotao}>Voltar</Text>
           </TouchableOpacity>
         </View>
-
       </View>
 
       <StatusBar style="auto" />
@@ -166,12 +164,12 @@ export default function Cadastro({ navigation }) {
                 style={styles.card}
               >
                 <Text style={styles.cardText}>Tema: {tema.tema}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                  <TouchableOpacity onPress={() => editarTema(tema)} style={{ marginRight: 10 }}>
-                    <Ionicons name='pencil' size={24} color='#820B8A' />
+                <View style={styles.iconsContainer}>
+                  <TouchableOpacity onPress={() => editarTema(tema)} style={{ marginBottom: 5 }}>
+                    <Ionicons name='pencil' size={20} color='#820B8A' />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => excluirTema(tema.id_tema)}>
-                    <Ionicons name='trash' size={24} color='#820B8A' />
+                    <Ionicons name='trash' size={20} color='#820B8A' />
                   </TouchableOpacity>
                 </View>
               </Animatable.View>
@@ -184,21 +182,6 @@ export default function Cadastro({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#FFF',
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardText: {
-    fontSize: 18,
-    color: '#333',
-  },
   container: {
     flex: 1,
     backgroundColor: '#DCD6F7',
@@ -258,5 +241,34 @@ const styles = StyleSheet.create({
     color: '#820B8A',
     fontSize: 20,
     fontWeight: 'bold'
+  },
+  iconsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    right: 10,
+    top: 0,
+    bottom: 0,
+    height: 'auto',
+  },
+  card: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    paddingRight: 50,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    position: 'relative',
+    minHeight: 60,
+  },
+  cardText: {
+    fontSize: 16,
+    color: '#333',
+    paddingRight: 50,
   },
 });

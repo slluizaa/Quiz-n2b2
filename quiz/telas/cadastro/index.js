@@ -224,11 +224,11 @@ export default function Cadastro({ navigation }) {
                   style={styles.card}
                 >
                   <Text style={styles.cardText}> {pergunta.pergunta}</Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-                    <TouchableOpacity onPress={() => editarTema(pergunta)} style={{ marginRight: 10 }}>
+                  <View style={styles.iconsContainer}>
+                    <TouchableOpacity onPress={() => editarTema(pergunta)}>
                       <Ionicons name='pencil' size={24} color='#820B8A' />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => excluirPergunta(pergunta.id_pergunta)}>
+                    <TouchableOpacity onPress={() => excluirPergunta(pergunta.id_pergunta)} style={{ marginTop: 10 }}>
                       <Ionicons name='trash' size={24} color='#820B8A' />
                     </TouchableOpacity>
                   </View>
@@ -243,6 +243,35 @@ export default function Cadastro({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  iconsContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    position: 'absolute',
+    right: 10,
+    top: 0,
+    bottom: 0,
+    height: 'auto',
+  },
+  card: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    paddingRight: 50,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
+    position: 'relative',
+    minHeight: 60,
+  },
+  cardText: {
+    fontSize: 16,
+    color: '#333',
+    paddingRight: 50,
+  },
   container: {
     flex: 1,
     backgroundColor: '#DCD6F7',
@@ -324,20 +353,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
-  },
-  card: {
-    backgroundColor: '#FFF',
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardText: {
-    fontSize: 18,
-    color: '#333',
   },
 });

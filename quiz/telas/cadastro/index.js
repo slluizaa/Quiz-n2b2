@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     marginTop: 15,
-    width: '30%',
+    width: '31%',
     maxWidth: 120,
   },
   areaBotao: {

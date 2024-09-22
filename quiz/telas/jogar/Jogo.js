@@ -20,7 +20,7 @@ export default function Jogo({ navigation, route }) {
         if (perguntas.length > 0) {
           const perguntasFormatadas = perguntas.map(pergunta => ({
             pergunta: pergunta.pergunta,
-            respostas: pergunta.alternativas, // As alternativas agora vêm diretamente da função
+            respostas: pergunta.alternativas || [],
             respostaCorreta: pergunta.correta,
           }));
           setQuizData(perguntasFormatadas);
@@ -42,13 +42,13 @@ export default function Jogo({ navigation, route }) {
     setRespostaSelecionada(answer);
     setRespondida(true);
 
-    const isCorrect = answer === quizData[perguntaAtual].correctAnswer;
+    const isCorrect = answer === quizData[perguntaAtual].respostaCorreta;
     const novoResumo = [
       ...resumoRespostas,
       {
-        pergunta: quizData[perguntaAtual].question,
+        pergunta: quizData[perguntaAtual].pergunta,
         respostaUsuario: answer,
-        respostaCorreta: quizData[perguntaAtual].correctAnswer,
+        respostaCorreta: quizData[perguntaAtual].respostaCorreta,
         estaCorreta: isCorrect,
       },
     ];
@@ -84,16 +84,24 @@ export default function Jogo({ navigation, route }) {
 
   const currentQuestion = quizData[perguntaAtual];
 
+  if (!currentQuestion || !currentQuestion.respostas) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Pergunta não encontrada</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <View style={styles.containerTema}>
         <Text style={styles.textoTema}> Tema: {route.params?.parametroTema} </Text>
       </View>
-      <Text style={styles.question}>{currentQuestion.question}</Text>
+      <Text style={styles.question}>{currentQuestion.pergunta}</Text>
 
       {/* Exibe as alternativas */}
-      {currentQuestion.answers.map((answer, index) => (
+      {currentQuestion.respostas.map((answer, index) => (
         <TouchableOpacity
           key={index}
           style={[
@@ -140,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   selectedButton: {
-    backgroundColor: '#d1c4e9', // Cor diferenciada para o botão selecionado
+    backgroundColor: '#d1c4e9',
   },
   answerText: {
     textAlign: 'center',

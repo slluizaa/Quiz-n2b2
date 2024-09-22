@@ -25,7 +25,7 @@ export default function Cadastro({ navigation }) {
       try {
         await createTable();
       } catch (e) {
-        console.log("Silent Error in Database Setup: ", e.message);
+        console.log("Erro ao criar tabelas: ", e.message);
       }
     }
     setupDatabase();
@@ -53,7 +53,7 @@ export default function Cadastro({ navigation }) {
         id_tema: idTemaEditando,
         tema: temaNormalizado,
       };
-      
+
       try {
         const resultado = await editaTema(obj);
         if (resultado) {
@@ -64,7 +64,7 @@ export default function Cadastro({ navigation }) {
         limparCampos();
         await carregaDados(); // Recarrega a lista após a edição
       } catch (e) {
-        console.log("Silent Error on Tema Update: ", e.message);
+        console.log("Erro ao atualizar: ", e.message);
       }
     } else {
       const existe = await temaExiste(temaNormalizado);
@@ -88,7 +88,7 @@ export default function Cadastro({ navigation }) {
         limparCampos();
 
       } catch (e) {
-        console.log("Silent Error on Tema Save: ", e.message);
+        console.log("Erro ao salvar: ", e.message);
       }
     }
   }
@@ -99,7 +99,7 @@ export default function Cadastro({ navigation }) {
       await carregaDados();
       Alert.alert("Tema excluído com sucesso!");
     } catch (e) {
-      console.log("Silent Error on Tema Delete: ", e.message);
+      console.log("Erro ao excluir: ", e.message);
     }
   }
 

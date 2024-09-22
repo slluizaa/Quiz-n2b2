@@ -19,9 +19,9 @@ export default function Jogo({ navigation, route }) {
         const perguntas = await obtemPerguntasPorTema(route.params?.parametroTema);
         if (perguntas.length > 0) {
           const perguntasFormatadas = perguntas.map(pergunta => ({
-            pergunta: pergunta.pergunta,
-            respostas: pergunta.alternativas || [],
-            respostaCorreta: pergunta.correta,
+            question: pergunta.pergunta,
+            answers: pergunta.alternativas, // As alternativas agora vêm diretamente da função
+            correctAnswer: pergunta.correta, // Certifique-se de que o campo correta está correto
           }));
           setQuizData(perguntasFormatadas);
           setLoading(false); // Finaliza o carregamento
@@ -37,21 +37,22 @@ export default function Jogo({ navigation, route }) {
     carregarPerguntas();
   }, [route.params?.parametroTema]);
 
-
   const handleAnswerSelect = (answer) => {
     setRespostaSelecionada(answer);
     setRespondida(true);
 
-    const isCorrect = answer === quizData[perguntaAtual].respostaCorreta;
+    const isCorrect = answer === quizData[perguntaAtual].correctAnswer;
+
     const novoResumo = [
       ...resumoRespostas,
       {
-        pergunta: quizData[perguntaAtual].pergunta,
-        respostaUsuario: answer,
-        respostaCorreta: quizData[perguntaAtual].respostaCorreta,
-        estaCorreta: isCorrect,
-      },
+        question: quizData[perguntaAtual].question,
+        userAnswer: answer,
+        correctAnswer: quizData[perguntaAtual].correctAnswer,
+        isCorrect: isCorrect
+      }
     ];
+
     setResumoRespostas(novoResumo);
 
     const newScore = isCorrect ? score + 1 : score;
@@ -66,7 +67,7 @@ export default function Jogo({ navigation, route }) {
         navigation.navigate('Score', {
           parametroPontos: newScore,
           totalQuestions: quizData.length,
-          resumoRespostas: novoResumo,
+          resumoRespostas: novoResumo
         });
       }
       setRespondida(false);
@@ -84,24 +85,14 @@ export default function Jogo({ navigation, route }) {
 
   const currentQuestion = quizData[perguntaAtual];
 
-  if (!currentQuestion || !currentQuestion.respostas) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.loadingText}>Pergunta não encontrada</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
       <View style={styles.containerTema}>
         <Text style={styles.textoTema}> Tema: {route.params?.parametroTema} </Text>
       </View>
-      <Text style={styles.question}>{currentQuestion.pergunta}</Text>
-
-      {/* Exibe as alternativas */}
-      {currentQuestion.respostas.map((answer, index) => (
+      <Text style={styles.question}>{currentQuestion.question}</Text>
+      {currentQuestion.answers.map((answer, index) => (
         <TouchableOpacity
           key={index}
           style={[
@@ -154,12 +145,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: '#820B8A',
-    fontWeight: 'bold',
-  },
-  feedback: {
-    marginTop: 20,
-    fontSize: 18,
-    textAlign: 'center',
     fontWeight: 'bold',
   },
   containerTema: {

@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
-import { obtemTodosTemas, obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
+import { obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
 import { Ionicons } from '@expo/vector-icons';

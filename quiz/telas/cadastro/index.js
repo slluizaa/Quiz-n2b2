@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
 import { obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
@@ -15,7 +15,7 @@ export default function Cadastro({ navigation }) {
   const [alternativa3, setAlternativa3] = useState('');
   const [alternativa4, setAlternativa4] = useState('');
   const [valueAcerto, setValueAcerto] = useState(null); // Alternativa correta
-  const [perguntas, setPerguntas] = useState([]);
+  const [perguntas, setPerguntas] = useState([])
   const [showPergunta, setShowPergunta] = useState(false); // Perguntas salvas para o tema selecionado
 
   // DropDownPicker para Temas
@@ -107,7 +107,7 @@ export default function Cadastro({ navigation }) {
     try {
       const perguntasCarregadas = await obtemTodasPerguntas(); // Altere para uma função que retorna todas as perguntas
       setPerguntas(perguntasCarregadas);
-      setShowPergunta(true);
+      setShowPergunta(true)
     } catch (error) {
       Alert.alert('Erro ao carregar as perguntas', error.message);
     }
@@ -123,114 +123,118 @@ export default function Cadastro({ navigation }) {
     }
   }
 
-  // Definindo o formulário como cabeçalho da lista
-  const renderHeader = () => (
-    <View style={styles.containerForm}>
-      <Text style={styles.titulo}>Cadastro de Perguntas</Text>
-
-      <Text style={styles.label}>Selecione o tema</Text>
-      <DropDownPicker
-        open={open}
-        value={tema}
-        items={items}
-        setOpen={setOpen}
-        setValue={setTema}
-        setItems={setItems}
-        textStyle={{
-          fontSize: 15,
-          color: '#820B8A',
-        }}
-      />
-
-      <Text style={styles.label}>Pergunta:</Text>
-      <TextInput
-        onChangeText={setPergunta}
-        value={pergunta}
-        style={styles.campo}
-      />
-
-      <Text style={styles.label}>1º alternativa:</Text>
-      <TextInput
-        onChangeText={setAlternativa1}
-        value={alternativa1}
-        style={styles.campo}
-      />
-
-      <Text style={styles.label}>2º alternativa:</Text>
-      <TextInput
-        onChangeText={setAlternativa2}
-        value={alternativa2}
-        style={styles.campo}
-      />
-
-      <Text style={styles.label}>3º alternativa:</Text>
-      <TextInput
-        onChangeText={setAlternativa3}
-        value={alternativa3}
-        style={styles.campo}
-      />
-
-      <Text style={styles.label}>4º alternativa:</Text>
-      <TextInput
-        onChangeText={setAlternativa4}
-        value={alternativa4}
-        style={styles.campo}
-      />
-
-      <Text style={styles.label}>Selecione a alternativa correta</Text>
-      <DropDownPicker
-        open={openAcerto}
-        value={valueAcerto}
-        items={itemsAcerto}
-        setOpen={setOpenAcerto}
-        setValue={setValueAcerto}
-        setItems={setItemsAcerto}
-        textStyle={{
-          fontSize: 15,
-          color: '#820B8A',
-        }}
-      />
-
-      <View style={styles.areaBotao}>
-        <TouchableOpacity style={styles.botao} onPress={salvarPergunta}>
-          <Text style={styles.textoBotao}>Salvar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.botao} onPress={carregaPerguntas}>
-          <Text style={styles.textoBotao}>Carregar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.textoBotao}>Voltar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-      {/* FlatList para exibir o formulário no cabeçalho e a lista de perguntas */}
-      <FlatList
-        data={perguntas}
-        keyExtractor={(item) => item.id_pergunta}
-        renderItem={({ item }) => (
-          <Animatable.View animation="fadeInUp" duration={600} style={styles.card}>
-            <Text style={styles.cardText}>{item.pergunta}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-              <TouchableOpacity onPress={() => editarTema(item)} style={{ marginRight: 10 }}>
-                <Ionicons name="pencil" size={24} color="#820B8A" />
-                <Text>Editar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => excluirPergunta(item.id_pergunta)}>
-                <Ionicons name="trash" size={24} color="#820B8A" />
-                <Text>Excluir</Text>
-              </TouchableOpacity>
-            </View>
-          </Animatable.View>
-        )}
-        ListHeaderComponent={renderHeader}
-      />
-      <StatusBar style="auto" />
+      <ScrollView>
+        <View style={styles.containerForm}>
+          <Text style={styles.titulo}>Cadastro de Perguntas</Text>
+
+          <Text style={styles.label}>Selecione o tema</Text>
+          <DropDownPicker
+            open={open}
+            value={tema}
+            items={items}
+            setOpen={setOpen}
+            setValue={setTema}
+            setItems={setItems}
+            textStyle={{
+              fontSize: 15,
+              color: '#820B8A',
+            }}
+          />
+
+          <Text style={styles.label}>Pergunta:</Text>
+          <TextInput
+            onChangeText={setPergunta}
+            value={pergunta}
+            style={styles.campo}
+          />
+
+          <Text style={styles.label}>1º alternativa:</Text>
+          <TextInput
+            onChangeText={setAlternativa1}
+            value={alternativa1}
+            style={styles.campo}
+          />
+
+          <Text style={styles.label}>2º alternativa:</Text>
+          <TextInput
+            onChangeText={setAlternativa2}
+            value={alternativa2}
+            style={styles.campo}
+          />
+
+          <Text style={styles.label}>3º alternativa:</Text>
+          <TextInput
+            onChangeText={setAlternativa3}
+            value={alternativa3}
+            style={styles.campo}
+          />
+
+          <Text style={styles.label}>4º alternativa:</Text>
+          <TextInput
+            onChangeText={setAlternativa4}
+            value={alternativa4}
+            style={styles.campo}
+          />
+
+          <Text style={styles.label}>Selecione a alternativa correta</Text>
+          <DropDownPicker
+            open={openAcerto}
+            value={valueAcerto}
+            items={itemsAcerto}
+            setOpen={setOpenAcerto}
+            setValue={setValueAcerto}
+            setItems={setItemsAcerto}
+            textStyle={{
+              fontSize: 15,
+              color: '#820B8A',
+            }}
+          />
+
+          <View style={styles.areaBotao}>
+            <TouchableOpacity style={styles.botao} onPress={salvarPergunta}>
+              <Text style={styles.textoBotao}>Salvar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.botao} onPress={carregaPerguntas}>
+              <Text style={styles.textoBotao}>Carregar</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
+              <Text style={styles.textoBotao}>Voltar</Text>
+            </TouchableOpacity>
+          </View>
+
+        </View>
+
+        <StatusBar style="auto" />
+
+        {
+          showPergunta && (
+            <ScrollView style={{ marginTop: 20, width: '100%' }}>
+              {perguntas.length > 0 && perguntas.map((pergunta, index) => (
+                <Animatable.View
+                  key={index}
+                  animation="fadeInUp"
+                  duration={600}
+                  style={styles.card}
+                >
+                  <Text style={styles.cardText}> {pergunta.pergunta}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                    <TouchableOpacity onPress={() => editarTema(pergunta)} style={{ marginRight: 10 }}>
+                      <Ionicons name='pencil' size={24} color='#820B8A' />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => excluirPergunta(pergunta.id_pergunta)}>
+                      <Ionicons name='trash' size={24} color='#820B8A' />
+                    </TouchableOpacity>
+                  </View>
+                </Animatable.View>
+              ))}
+            </ScrollView>
+          )
+        }
+      </ScrollView>
     </View>
   );
 }
@@ -245,7 +249,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   containerForm: {
-    width: '100%',
+    flex: 1,
+    width: '95%',
   },
   titulo: {
     fontSize: 30,
@@ -293,6 +298,26 @@ const styles = StyleSheet.create({
     color: '#820B8A',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  perguntaContainer: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+  perguntaTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  alternativa: {
+    marginTop: 5,
+    fontSize: 16,
+    color: '#333',
+  },
+  botaoContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
   },
   card: {
     backgroundColor: '#FFF',

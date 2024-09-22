@@ -108,17 +108,10 @@ export async function obtemTodasPerguntas() {
     const cx = await getDbConnection();
     try {
         const perguntas = await cx.getAllAsync('SELECT * FROM tbPerguntas');
-        const perguntasComAlternativas = [];
-
-        for (const pergunta of perguntas) {
-            const alternativas = await cx.getAllAsync('SELECT * FROM tbAlternativas WHERE id_pergunta = ?', [pergunta.id_pergunta]);
-            perguntasComAlternativas.push({
-                ...pergunta,
-                alternativas,
-            });
-        }
-
-        return perguntasComAlternativas;
+        return perguntas.map((pergunta) => ({
+            id_pergunta:pergunta.id_pergunta,
+            pergunta:pergunta.pergunta
+        }));
     } catch (e) {
         throw new Error('Erro ao obter perguntas: ' + e.message);
     } finally {

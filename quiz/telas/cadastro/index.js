@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
 import { obtemTodasPerguntas, adicionaPergunta,obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
 import uuid from 'react-native-uuid';
+import * as Animatable from 'react-native-animatable';
+import { Ionicons } from '@expo/vector-icons'; 
 
 export default function Cadastro({ navigation }) {
   const [tema, setTema] = useState(null); // ID do tema selecionado
@@ -13,7 +15,8 @@ export default function Cadastro({ navigation }) {
   const [alternativa3, setAlternativa3] = useState('');
   const [alternativa4, setAlternativa4] = useState('');
   const [valueAcerto, setValueAcerto] = useState(null); // Alternativa correta
-  const [perguntas, setPerguntas] = useState([]); // Perguntas salvas para o tema selecionado
+  const [perguntas, setPerguntas] = useState([])
+  const [showPergunta, setShowPergunta] = useState(false); // Perguntas salvas para o tema selecionado
 
   // DropDownPicker para Temas
   const [open, setOpen] = useState(false);
@@ -104,6 +107,7 @@ export default function Cadastro({ navigation }) {
     try {
       const perguntasCarregadas = await obtemTodasPerguntas(); // Altere para uma função que retorna todas as perguntas
       setPerguntas(perguntasCarregadas);
+      setShowPergunta(true)
     } catch (error) {
       Alert.alert('Erro ao carregar as perguntas', error.message);
     }
@@ -121,6 +125,7 @@ export default function Cadastro({ navigation }) {
 
   return (
     <View style={styles.container}>
+    <ScrollView>
       <View style={styles.containerForm}>
         <Text style={styles.titulo}>Cadastro de Perguntas</Text>
 
@@ -201,31 +206,35 @@ export default function Cadastro({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={perguntas}
-          keyExtractor={(item) => item.id_pergunta}
-          renderItem={({ item }) => (
-            <View style={styles.perguntaContainer}>
-              <Text style={styles.perguntaTitulo}>{item.pergunta}</Text>
-              {item.alternativas.map((alternativa, altIndex) => (
-                <Text key={altIndex} style={styles.alternativa}>
-                  {alternativa.alternativa} - {alternativa.resposta === 'sim' ? 'Correta' : 'Incorreta'}
-                </Text>
-              ))}
-              <View style={styles.botaoContainer}>
-                <TouchableOpacity style={styles.botaoEditar} onPress={() => { /* Implementar função para editar */ }}>
-                  <Text style={styles.textoBotao}>Editar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.botaoExcluir} onPress={() => excluirPergunta(item.id_pergunta)}>
-                  <Text style={styles.textoBotao}>Excluir</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        />
       </View>
 
       <StatusBar style="auto" />
+
+      {
+        showPergunta && (
+          <ScrollView style={{ marginTop: 20, width: '100%' }}>
+            {perguntas.length > 0 && perguntas.map((pergunta, index) => (
+              <Animatable.View
+                key={index}
+                animation="fadeInUp"
+                duration={600}
+                style={styles.card}
+              >
+                <Text style={styles.cardText}> {pergunta.pergunta}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+                  <TouchableOpacity onPress={() => editarTema(pergunta)} style={{ marginRight: 10 }}>
+                    <Ionicons name='pencil' size={24} color='#820B8A' />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => excluirPergunta(pergunta.id_pergunta)}>
+                    <Ionicons name='trash' size={24} color='#820B8A' />
+                  </TouchableOpacity>
+                </View>
+              </Animatable.View>
+            ))}
+          </ScrollView>
+        )
+      }
+      </ScrollView>
     </View>
   );
 }
@@ -241,7 +250,7 @@ const styles = StyleSheet.create({
   },
   containerForm: {
     flex: 1,
-    width: '100%',
+    width: '95%',
   },
   titulo: {
     fontSize: 30,
@@ -310,14 +319,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 10,
   },
-  botaoEditar: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
+  card: {
+    backgroundColor: '#FFF',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 5,
   },
-  botaoExcluir: {
-    backgroundColor: '#F44336',
-    padding: 10,
-    borderRadius: 5,
+  cardText: {
+    fontSize: 18,
+    color: '#333',
   },
 });

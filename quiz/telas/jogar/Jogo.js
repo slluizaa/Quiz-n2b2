@@ -12,17 +12,22 @@ export default function Jogo({ navigation, route }) {
   const [respondida, setRespondida] = useState(false);
   const [resumoRespostas, setResumoRespostas] = useState([]);
   const [loading, setLoading] = useState(true); // Flag para indicar se está carregando as perguntas
+  const numeroPerguntas = route.params?.numeroPerguntas || 0; // Número de perguntas escolhido pelo usuário
 
   useEffect(() => {
     async function carregarPerguntas() {
       try {
         const perguntas = await obtemPerguntasPorTema(route.params?.parametroTema);
         if (perguntas.length > 0) {
-          const perguntasFormatadas = perguntas.map(pergunta => ({
+          // Limita o número de perguntas com base no que o usuário selecionou
+          const perguntasLimitadas = perguntas.slice(0, numeroPerguntas);
+
+          const perguntasFormatadas = perguntasLimitadas.map(pergunta => ({
             question: pergunta.pergunta,
-            answers: pergunta.alternativas, // As alternativas agora vêm diretamente da função
+            answers: pergunta.alternativas, // As alternativas vêm diretamente da função
             correctAnswer: pergunta.correta, // Certifique-se de que o campo correta está correto
           }));
+
           setQuizData(perguntasFormatadas);
           setLoading(false); // Finaliza o carregamento
         } else {

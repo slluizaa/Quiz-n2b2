@@ -5,7 +5,6 @@ export async function getDbConnection() {
     return cx;
 }
 
-// Função para criar as tabelas de temas, perguntas e alternativas
 export async function createTable() {
     const queryTemas = `
       CREATE TABLE IF NOT EXISTS tbTemas (
@@ -38,7 +37,6 @@ export async function createTable() {
         cx = await getDbConnection();
 
         // Criar as tabelas na ordem correta
-
         await cx.execAsync(queryTemas); // Executa a criação da tabela de temas
         await cx.execAsync(queryPerguntas); // Executa a criação da tabela de perguntas
         await cx.execAsync(queryAlternativas); // Executa a criação da tabela de alternativas
@@ -85,15 +83,16 @@ export async function adicionaAlternativa(alternativa) {
 export async function obtemPerguntasPorTema(id_tema) {
     const cx = await getDbConnection();
     try {
-        const perguntas = await cx.getAllAsync('SELECT * FROM tbPerguntas WHERE id_tema = ?', [id_tema]);
+        const perguntas = await cx.getAllAsync('SELECT tbPerguntas.*, tbTemas.tema FROM tbPerguntas INNER JOIN tbTemas ON tbPerguntas.id_tema = tbTemas.id_tema WHERE tbPerguntas.id_tema = ?', [id_tema]);
         const perguntasComAlternativas = [];
 
         for (const pergunta of perguntas) {
             const alternativas = await cx.getAllAsync('SELECT * FROM tbAlternativas WHERE id_pergunta = ?', [pergunta.id_pergunta]);
             perguntasComAlternativas.push({
+                tema: pergunta.tema,
                 id_pergunta: pergunta.id_pergunta,
                 pergunta: pergunta.pergunta,
-                alternativas: alternativas.map(alt => alt.alternativa), // Garante que estamos extraindo o campo 'alternativa'
+                alternativas: alternativas.map(alt => alt.alternativa),
                 correta: alternativas.find(alt => alt.resposta === 'sim').alternativa // Busca a alternativa correta
             });
         }
@@ -216,7 +215,7 @@ export async function excluiTema(id_tema) {
 
 export async function contaPerguntas(id_tema) {
     try {
-        const todasPerguntas = await obtemTodasPerguntas(); // Obtém todas as perguntas
+        const todasPerguntas = await obtemTodasPerguntas();
         const perguntasDoTema = todasPerguntas.filter(pergunta => pergunta.id_tema === id_tema); // Filtra perguntas do tema específico
         return perguntasDoTema.length; // Retorna o número de perguntas do tema
     } catch (e) {

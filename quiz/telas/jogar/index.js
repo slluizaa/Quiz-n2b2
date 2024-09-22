@@ -2,21 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
-import { obtemTodosTemas, contaPerguntas } from '../../services/dbservice'; // Importar a função para contar perguntas
+import { obtemTodosTemas, contaPerguntas } from '../../services/dbservice';
 import logo from '../../assets/logo.png';
 
 export default function Jogar({ navigation }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null); // Para armazenar o ID do tema selecionado
   const [items, setItems] = useState([]); // Para armazenar os temas no DropDownPicker
-  const [pergunta, setPergunta] = useState(""); // Número de perguntas escolhidas pelo usuário
-  const [perguntasDisponiveis, setPerguntasDisponiveis] = useState(0); // Perguntas disponíveis para o tema selecionado
+  const [pergunta, setPergunta] = useState("");
+  const [perguntasDisponiveis, setPerguntasDisponiveis] = useState(0);
 
-  // Carregar os temas quando o componente montar
+
   useEffect(() => {
     async function carregaTemas() {
       try {
-        const temasCadastrados = await obtemTodosTemas(); // Buscar os temas do banco de dados
+        const temasCadastrados = await obtemTodosTemas();
         const temasDropdown = temasCadastrados.map((tema) => ({
           label: tema.tema,
           value: tema.id_tema,
@@ -29,10 +29,9 @@ export default function Jogar({ navigation }) {
     carregaTemas();
   }, []);
 
-  // Função chamada quando o usuário seleciona um tema
+
   useEffect(() => {
     if (value) {
-      // Se um tema for selecionado, contar as perguntas disponíveis para o tema
       async function buscaPerguntasDisponiveis() {
         try {
           const totalPerguntas = await contaPerguntas(value);
@@ -45,7 +44,7 @@ export default function Jogar({ navigation }) {
     }
   }, [value]);
 
-  // Função para iniciar o jogo
+
   const iniciarJogo = () => {
     const numeroPerguntas = parseInt(pergunta);
 
@@ -60,7 +59,6 @@ export default function Jogar({ navigation }) {
         `Você escolheu mais perguntas do que estão disponíveis. O máximo para esse tema é ${perguntasDisponiveis}.`
       );
     } else {
-      // Passar para a próxima tela com o tema e o número de perguntas
       navigation.navigate('Jogo', { parametroTema: value, numeroPerguntas });
     }
   };

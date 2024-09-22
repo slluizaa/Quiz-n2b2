@@ -5,12 +5,12 @@ import logo from '../../assets/logo.png';
 import { adicionaTema, createTable, obtemTodosTemas, temaExiste, excluiTema, editaTema } from '../../services/dbservice';
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Cadastro({ navigation }) {
-  const [tema, setTema] = useState(""); // Para armazenar o tema que será digitado
-  const [idTemaEditando, setIdTemaEditando] = useState(null); // Para armazenar o id do tema que está sendo editado
-  const [temas, setTemas] = useState([]); // Para armazenar a lista de temas
+  const [tema, setTema] = useState("");
+  const [idTemaEditando, setIdTemaEditando] = useState(null);
+  const [temas, setTemas] = useState([]);
   const [showTema, setShowTema] = useState(false); // Controla se a lista de temas deve ser mostrada
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Cadastro({ navigation }) {
       };
 
       try {
-        const resultado = await editaTema(obj); // Edita o tema no banco de dados
+        const resultado = await editaTema(obj);
         if (resultado) {
           Alert.alert('Sucesso!', 'Tema atualizado com sucesso!');
         } else {
@@ -58,7 +58,7 @@ export default function Cadastro({ navigation }) {
         limparCampos();
         await carregaDados(); // Recarrega a lista após a edição
       } catch (e) {
-        Alert.alert('Erro ao atualizar o tema', e.message); // Exibe o erro de maneira clara
+        Alert.alert('Erro ao atualizar o tema', e.message);
       }
     } else {
       const existe = await temaExiste(temaNormalizado);
@@ -73,7 +73,7 @@ export default function Cadastro({ navigation }) {
       };
 
       try {
-        const resultado = await adicionaTema(obj); // Adiciona o tema no banco de dados
+        const resultado = await adicionaTema(obj);
         if (resultado) {
           Alert.alert('Sucesso!', 'Tema salvo com sucesso!');
         } else {

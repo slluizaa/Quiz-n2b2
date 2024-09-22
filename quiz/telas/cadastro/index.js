@@ -2,19 +2,19 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, FlatList, ScrollView } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
-import { obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
+import { obtemTodosTemas, obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlternativa, excluiPergunta } from '../../services/dbservice';
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Cadastro({ navigation }) {
-  const [tema, setTema] = useState(null); // ID do tema selecionado
+  const [tema, setTema] = useState(null);
   const [pergunta, setPergunta] = useState('');
   const [alternativa1, setAlternativa1] = useState('');
   const [alternativa2, setAlternativa2] = useState('');
   const [alternativa3, setAlternativa3] = useState('');
   const [alternativa4, setAlternativa4] = useState('');
-  const [valueAcerto, setValueAcerto] = useState(null); // Alternativa correta
+  const [valueAcerto, setValueAcerto] = useState(null);
   const [perguntas, setPerguntas] = useState([])
   const [showPergunta, setShowPergunta] = useState(false); // Perguntas salvas para o tema selecionado
 
@@ -26,11 +26,10 @@ export default function Cadastro({ navigation }) {
   const [openAcerto, setOpenAcerto] = useState(false);
   const [itemsAcerto, setItemsAcerto] = useState([]); // Para armazenar as alternativas
 
-  // Carrega os temas cadastrados
   useEffect(() => {
     async function carregaTemas() {
       try {
-        const temasCadastrados = await obtemTodosTemas(); // Função que busca os temas do banco
+        const temasCadastrados = await obtemTodosTemas();
         const temasDropdown = temasCadastrados.map((tema) => ({
           label: tema.tema,
           value: tema.id_tema,
@@ -43,7 +42,7 @@ export default function Cadastro({ navigation }) {
     carregaTemas();
   }, []);
 
-  // Função para salvar a pergunta e as alternativas
+
   async function salvarPergunta() {
     if (!tema || !pergunta || !alternativa1 || !alternativa2 || !alternativa3 || !alternativa4 || !valueAcerto) {
       Alert.alert('Erro', 'Todos os campos devem ser preenchidos.');
@@ -52,7 +51,6 @@ export default function Cadastro({ navigation }) {
 
     const idPergunta = uuid.v4();
 
-    // Salvar a pergunta no banco de dados
     try {
       await adicionaPergunta({ id_pergunta: idPergunta, id_tema: tema, pergunta });
 
@@ -79,7 +77,7 @@ export default function Cadastro({ navigation }) {
     }
   }
 
-  // Limpar os campos após salvar
+
   function limparCampos() {
     setTema(null);
     setPergunta('');
@@ -102,10 +100,10 @@ export default function Cadastro({ navigation }) {
     setItemsAcerto(alternativasDropdown);
   }, [alternativa1, alternativa2, alternativa3, alternativa4]);
 
-  // Função para carregar todas as perguntas
+
   async function carregaPerguntas() {
     try {
-      const perguntasCarregadas = await obtemTodasPerguntas(); // Altere para uma função que retorna todas as perguntas
+      const perguntasCarregadas = await obtemTodasPerguntas();
       setPerguntas(perguntasCarregadas);
       setShowPergunta(true)
     } catch (error) {
@@ -113,11 +111,11 @@ export default function Cadastro({ navigation }) {
     }
   }
 
-  // Função para excluir pergunta
+
   async function excluirPergunta(idPergunta) {
     try {
       await excluiPergunta(idPergunta);
-      carregaPerguntas(); // Recarrega as perguntas após excluir
+      carregaPerguntas();
     } catch (error) {
       Alert.alert('Erro ao excluir a pergunta', error.message);
     }

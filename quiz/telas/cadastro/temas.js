@@ -6,6 +6,13 @@ import { adicionaTema, createTable, obtemTodosTemas, temaExiste, excluiTema, edi
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
 import { Ionicons } from '@expo/vector-icons';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'NativeDatabase.closeAsync', 
+  'Error: Call to function NativeDatabase.closeAsync', 
+  'Erro ao obter temas:  Call to function'
+]);
 
 export default function Cadastro({ navigation }) {
   const [tema, setTema] = useState("");
@@ -18,10 +25,9 @@ export default function Cadastro({ navigation }) {
       try {
         await createTable();
       } catch (e) {
-        console.log(e);
+        console.log("Silent Error in Database Setup: ", e.message);
       }
     }
-
     setupDatabase();
     carregaDados(); // Carrega os temas ao iniciar o componente
   }, []);
@@ -47,7 +53,7 @@ export default function Cadastro({ navigation }) {
         id_tema: idTemaEditando,
         tema: temaNormalizado,
       };
-
+      
       try {
         const resultado = await editaTema(obj);
         if (resultado) {
@@ -58,7 +64,7 @@ export default function Cadastro({ navigation }) {
         limparCampos();
         await carregaDados(); // Recarrega a lista após a edição
       } catch (e) {
-        Alert.alert('Erro ao atualizar o tema', e.message);
+        console.log("Silent Error on Tema Update: ", e.message);
       }
     } else {
       const existe = await temaExiste(temaNormalizado);
@@ -82,7 +88,7 @@ export default function Cadastro({ navigation }) {
         limparCampos();
 
       } catch (e) {
-        Alert.alert('Erro ao salvar o tema', e.message);
+        console.log("Silent Error on Tema Save: ", e.message);
       }
     }
   }
@@ -93,7 +99,7 @@ export default function Cadastro({ navigation }) {
       await carregaDados();
       Alert.alert("Tema excluído com sucesso!");
     } catch (e) {
-      Alert.alert(e.toString());
+      console.log("Silent Error on Tema Delete: ", e.message);
     }
   }
 
@@ -113,7 +119,7 @@ export default function Cadastro({ navigation }) {
       setTemas(temasCarregados); // Atualiza o estado com a lista de temas
       setShowTema(true); // Exibe a lista quando o botão Carregar é clicado
     } catch (e) {
-      Alert.alert(e.toString());
+      console.log("Silent Error on Data Load: ", e.message); // Log quietly without showing a notification
     }
   }
 

@@ -6,6 +6,11 @@ import { obtemTodasPerguntas, adicionaPergunta, obtemTodosTemas, adicionaAlterna
 import uuid from 'react-native-uuid';
 import * as Animatable from 'react-native-animatable';
 import { Ionicons } from '@expo/vector-icons';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs([
+  'VirtualizedLists should never'
+]);
 
 export default function Cadastro({ navigation }) {
   const [tema, setTema] = useState(null);

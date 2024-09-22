@@ -17,12 +17,11 @@ export default function Jogo({ navigation, route }) {
     async function carregarPerguntas() {
       try {
         const perguntas = await obtemPerguntasPorTema(route.params?.parametroTema);
-        console.log(perguntas); // Depuração para ver as perguntas e alternativas retornadas
         if (perguntas.length > 0) {
           const perguntasFormatadas = perguntas.map(pergunta => ({
-            question: pergunta.pergunta,
-            answers: pergunta.alternativas, // As alternativas agora vêm diretamente da função
-            correctAnswer: pergunta.correta,
+            pergunta: pergunta.pergunta,
+            respostas: pergunta.alternativas, // As alternativas agora vêm diretamente da função
+            respostaCorreta: pergunta.correta,
           }));
           setQuizData(perguntasFormatadas);
           setLoading(false); // Finaliza o carregamento
@@ -47,10 +46,10 @@ export default function Jogo({ navigation, route }) {
     const novoResumo = [
       ...resumoRespostas,
       {
-        question: quizData[perguntaAtual].question,
-        userAnswer: answer,
-        correctAnswer: quizData[perguntaAtual].correctAnswer,
-        isCorrect: isCorrect,
+        pergunta: quizData[perguntaAtual].question,
+        respostaUsuario: answer,
+        respostaCorreta: quizData[perguntaAtual].correctAnswer,
+        estaCorreta: isCorrect,
       },
     ];
     setResumoRespostas(novoResumo);

@@ -8,11 +8,7 @@ import * as Animatable from 'react-native-animatable';
 import { Ionicons } from '@expo/vector-icons';
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs([
-  'NativeDatabase.closeAsync',
-  'Error: Call to function NativeDatabase.closeAsync',
-  'Erro ao obter temas:  Call to function'
-]);
+LogBox.ignoreAllLogs();
 
 export default function Cadastro({ navigation }) {
   const [tema, setTema] = useState("");

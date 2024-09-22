@@ -37,9 +37,9 @@ export async function createTable() {
         cx = await getDbConnection();
 
         // Criar as tabelas na ordem correta
-        await cx.execAsync(queryTemas); // Executa a criação da tabela de temas
-        await cx.execAsync(queryPerguntas); // Executa a criação da tabela de perguntas
-        await cx.execAsync(queryAlternativas); // Executa a criação da tabela de alternativas
+        await cx.execAsync(queryTemas);
+        await cx.execAsync(queryPerguntas);
+        await cx.execAsync(queryAlternativas);
 
         console.log("Tabelas criadas com sucesso!");
     } catch (e) {
@@ -47,7 +47,6 @@ export async function createTable() {
         throw new Error('Erro ao criar as tabelas: ' + e.message);
     } finally {
         if (cx) {
-            // Fechar a conexão ao final, após todas as operações estarem concluídas
             await cx.closeAsync();
         }
     }

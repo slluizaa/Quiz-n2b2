@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 15,
     width: '30%',
+    maxWidth: 120,
   },
   areaBotao: {
     flexDirection: 'row',
@@ -296,11 +297,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
     marginBottom: 20,
+    width: '100%',
   },
   textoBotao: {
     color: '#820B8A',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   perguntaContainer: {
     backgroundColor: '#FFF',

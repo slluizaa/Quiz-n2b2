@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, TextInput, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useState, useEffect } from 'react';
 import { obtemTodosTemas, contaPerguntas } from '../../services/dbservice';
@@ -59,50 +59,53 @@ export default function Jogar({ navigation }) {
         `Você escolheu mais perguntas do que estão disponíveis. O máximo para esse tema é ${perguntasDisponiveis}.`
       );
     } else {
+      Keyboard.dismiss();
       navigation.navigate('Jogo', { parametroTema: value, numeroPerguntas });
     }
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerForm}>
-        <Image source={logo} style={styles.logo} />
-        <Text style={styles.label}>Selecione o tema</Text>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          textStyle={{
-            fontSize: 15,
-            color: '#820B8A'
-          }}
-        />
-        <Text style={styles.labelDisponiveis}>Perguntas disponíveis: {perguntasDisponiveis}</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={styles.containerForm}>
+          <Image source={logo} style={styles.logo} />
+          <Text style={styles.label}>Selecione o tema</Text>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            textStyle={{
+              fontSize: 15,
+              color: '#820B8A'
+            }}
+          />
+          <Text style={styles.labelDisponiveis}>Perguntas disponíveis: {perguntasDisponiveis}</Text>
 
-        <Text style={styles.label}>Quantas perguntas você deseja?</Text>
-        <TextInput
-          keyboardType="numeric"
-          onChangeText={setPergunta}
-          value={pergunta}
-          style={styles.campo}
-          placeholder="Digite o número de perguntas"
-        />
+          <Text style={styles.label}>Quantas perguntas você deseja?</Text>
+          <TextInput
+            keyboardType="numeric"
+            onChangeText={setPergunta}
+            value={pergunta}
+            style={styles.campo}
+            placeholder="Digite o número de perguntas"
+          />
 
-        <View style={styles.areaBotao}>
-          <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
-            <Text style={styles.textoBotao}>Voltar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.botao} onPress={iniciarJogo}>
-            <Text style={styles.textoBotao}>Jogar</Text>
-          </TouchableOpacity>
+          <View style={styles.areaBotao}>
+            <TouchableOpacity style={styles.botao} onPress={() => navigation.navigate('Home')}>
+              <Text style={styles.textoBotao}>Voltar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.botao} onPress={iniciarJogo}>
+              <Text style={styles.textoBotao}>Jogar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <StatusBar style="auto" />
-    </View>
+        <StatusBar style="auto" />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

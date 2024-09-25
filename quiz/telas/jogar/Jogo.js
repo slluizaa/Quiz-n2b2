@@ -93,9 +93,8 @@ export default function Jogo({ navigation, route }) {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
-      <View style={styles.containerTema}>
-        <Text style={styles.textoTema}> Tema: {route.params?.parametroTema} </Text>
-      </View>
+
+
       <Text style={styles.question}>{currentQuestion.question}</Text>
       {currentQuestion.answers.map((answer, index) => (
         <TouchableOpacity
